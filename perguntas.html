@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Morte Súbita</title>
+</head>
+<body>
+    <main class="cabecalho">
+        <div id="question-container">
+            <p id="question"></p>
+            <input type="text" id="answer-input" placeholder="Digite sua resposta aqui">
+            <button onclick="checkAnswer()">Enviar Resposta</button>
+        </div>
+        <div id="extra-game-container" style="display: none;">
+            <p id="extra-game-message">Você quer jogar mais um jogo?</p>
+            <button onclick="pass()">Passa</button>
+            <button onclick="accept()">Aceita</button>
+            <button onclick="quit()">Desiste</button>
+        </div>
+    </main>
+    <p id="message"></p>
+    <p id="score">QI: 0</p>
+
+    <script>
+        let questions = [
+            { question: "Qual é a capital da França?", answer: "Paris" },
+            { question: "Quantos continentes existem no mundo?", answer: "7" },
+            { question: "Qual é o maior oceano do mundo?", answer: "Pacífico" },
+            { question: "Quando foi abolida a escravidão no Brasil?", answer: "1888" },
+            { question: "Qual é o planeta mais próximo do sol?", answer: "Mercúrio" },
+            { question: "Qual a bolacha que tem uma cara?", answer: "Trakinas" },
+            { question: "Quem interpretou o Homem de Ferro?", answer: "Robert Downey Jr" },
+            { question: "Quem é o ator do Batman no filme 'O Cavaleiro das Trevas'?", answer: "Christian Bale" },
+            { question: "Quem é o mais forte da Liga da Justiça?", answer: "Superman" },
+            { question: "Qual foi o filme dos 'Velozes e Furiosos' que aparece o Skyline R34?", answer: "Velozes e Furiosos 2" }
+        ];
+
+        let modalities = [
+            "Filmes",
+            "Músicas",
+            "Séries",
+            "Futebol"
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById('question').textContent = questions[currentQuestionIndex].question;
+            } else {
+                document.getElementById('question-container').style.display = 'none';
+                if (score <= 0) {
+                    alert('Você é brro?');
+                } else {
+                    document.getElementById('message').textContent = 'Parabéns! Você completou o quiz.';
+                }
+                if (score >= 10) {
+                    document.getElementById('extra-game-container').style.display = 'block';
+                }
+            }
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById('answer-input').value.trim();
+            if (userAnswer.toLowerCase() === questions[currentQuestionIndex].answer.toLowerCase()) {
+                score++;
+                document.getElementById('message').textContent = 'QI +1';
+            } else {
+                score--;
+                document.getElementById('message').textContent = 'Resposta errada. QI caiu.';
+            }
+            document.getElementById('score').textContent = 'QI: ' + score;
+            currentQuestionIndex++;
+            loadQuestion();
+            document.getElementById('answer-input').value = '';
+        }
+
+        function pass() {
+            let randomModality = modalities[Math.floor(Math.random() * modalities.length)];
+            document.getElementById('extra-game-message').textContent = `Nova modalidade: ${randomModality}`;
+        }
+
+        function accept() {
+            document.getElementById('extra-game-message').textContent = 'Você aceitou a nova modalidade!';
+            document.getElementById('extra-game-container').style.display = 'none';
+            // Implementação de novas perguntas ou funcionalidades do novo jogo pode ser adicionada aqui
+        }
+
+        function quit() {
+            score = 0;
+            document.getElementById('score').textContent = 'QI: ' + score;
+            document.getElementById('extra-game-message').textContent = 'Pontos resetados. Tente novamente!';
+            document.getElementById('extra-game-container').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            currentQuestionIndex = 0;
+            loadQuestion();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadQuestion);
+    </script>
+</body>
+</html>
